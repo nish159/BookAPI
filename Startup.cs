@@ -1,12 +1,19 @@
-﻿using System;
 using BookAPI.Models;
+using BookAPI.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace BookAPI
 {
@@ -22,7 +29,8 @@ namespace BookAPI
 		// This method gets called by the runtime. Use this method  to add services to the container
 		public void ConfigureServices(IServiceCollection services)
 		{
-			services.AddDbContext<BookContext>(o => o.UseSqlite("Data Source=books.db"));
+			services.AddScoped<IBookRepository, BookRepository>();
+			services.AddDbContext<BookContext>(o => o.UseSqlite("Data source=books.db"));
 			services.AddControllers();
 			services.AddSwaggerGen(c =>
 			{
@@ -37,7 +45,7 @@ namespace BookAPI
 			{
 				app.UseDeveloperExceptionPage();
 				app.UseSwagger();
-				app.UseSwaggerUI(c => c.SwaggerEndpoint("/swqagger/v1/swageger.json", "BookAPI v1"));
+				app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "BookAPI v1"));
 			}
 
 			app.UseHttpsRedirection();
@@ -53,4 +61,3 @@ namespace BookAPI
 		}
 	}
 }
-
